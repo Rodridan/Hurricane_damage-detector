@@ -5,7 +5,18 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "gdown>=5.2.0",
+    "jupyter>=1.1.1",
+    "loguru>=0.7",
+    "matplotlib>=3.5",
+    "numpy>=1.22",
+    "opencv-python>=4.5",
+    "pandas>=1.4",
     "pyarrow>=20.0.0",
+    "scikit-learn>=1.1",
+    "tensorflow>=2.10",
+    "tf-keras-vis>=0.8",
+    "tqdm>=4.64",
 ]
 
 [dependency-groups]

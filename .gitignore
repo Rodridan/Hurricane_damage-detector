@@ -6,6 +6,13 @@ __pycache__/
 # C extensions
 *.so
 
+#Outputs, logs, and checkpoints
+outputs/
+*.log
+*.h5
+__pycache__/
+.ipynb_checkpoints/
+
 # Distribution / packaging
 .Python
 build/

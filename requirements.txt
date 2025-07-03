@@ -4,23 +4,23 @@ pandas>=1.4
 matplotlib>=3.5
 tqdm>=4.64
 
-# Machine learning
+# Machine learning and evaluation
 scikit-learn>=1.1
 
 # Deep learning
 tensorflow>=2.10
 
-# TensorFlow Keras Visualizations (for GradCAM and other explainability tools)
+# Model explainability (GradCAM and more)
 tf-keras-vis>=0.8
 
-# Jupyter (optional, for running notebooks)
-jupyter
+# Logging
+loguru>=0.7
 
-# Utilities
-gdown        # For downloading datasets from Google Drive
-
-# For compatibility with image operations and overlays
+# Image processing for overlays (GradCAM)
 opencv-python>=4.5
 
-# Optional: Improve logging, highly recommended for clean output
-loguru>=0.7
+# Jupyter notebook (optional, for running .ipynb)
+jupyter
+
+# Google Drive downloader (optional, for dataset fetch)
+gdown
