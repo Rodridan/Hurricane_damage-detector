@@ -1,0 +1,14 @@
+[project]
+name = "hurricane-damage-detector"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pyarrow>=20.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1.1",
+]
