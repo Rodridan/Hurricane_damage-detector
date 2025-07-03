@@ -1,4 +1,4 @@
-from damage_detector.augmentation import augment_pipeline
+from riskscope.augmentation import augment_pipeline
 import tensorflow as tf
 
 def test_augmentation():

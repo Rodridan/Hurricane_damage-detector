@@ -1,4 +1,4 @@
-from damage_detector.data_utils import download_and_extract_data, prepare_train_and_val_datasets
+from riskscope.data_utils import download_and_extract_data, prepare_train_and_val_datasets
 
 def test_download():
     # Should not re-download if already present

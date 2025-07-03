@@ -1,9 +1,10 @@
 import os, gdown, zipfile, tensorflow as tf
 from loguru import logger
-from damage_detector.config import BATCH_SIZE, CLASSES, IMG_DIMS
+from riskscope.config import BATCH_SIZE, CLASSES, IMG_DIMS
 from typing import Tuple, Sequence
 import numpy as np
 from tqdm import tqdm
+
 #--------------------------------------------------------------
 #DATA DOWBLOADING & EXTRACTION
 #--------------------------------------------------------------

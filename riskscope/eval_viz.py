@@ -4,6 +4,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from typing import Sequence, Any, List, Optional, Dict, Tuple
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report
+
+try:
+    from tf_keras_vis.gradcam import Gradcam
+except ImportError:
+    Gradcam = None
 
 #--------------------------------------------------------------
 # SAVE OUTPUT IMAGES

@@ -13,6 +13,10 @@ outputs/
 __pycache__/
 .ipynb_checkpoints/
 
+# Ignore all files in pretrained_models except for the directory itself
+pretrained_models/*
+!pretrained_models/.gitkeep
+
 # Distribution / packaging
 .Python
 build/

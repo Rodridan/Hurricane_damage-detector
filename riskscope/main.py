@@ -1,18 +1,14 @@
-# main.py
-
 import os
-from typing import Tuple, Sequence
 
-from damage_detector.config import ( GDRIVE_ID, DATA_DIR, TRAIN_SUBDIR, TEST_SUBDIR, CLASSES, BATCH_SIZE, USE_PRETRAINED, PRETRAINED_MODEL_PATH)
-from damage_detector.data_utils import (download_and_extract_data, prepare_train_and_val_datasets, eval_model_on_test)
-from damage_detector.augmentation import (apply_augmentation_to_dataset, apply_resize_to_dataset)
-from damage_detector.model import build_resnet_model, train_model
-from damage_detector.model_loader import load_pretrained_model
-from damage_detector.eval_viz import (plot_classification_summary, extract_images_and_labels,
+from riskscope.config import ( GDRIVE_ID, DATA_DIR, TRAIN_SUBDIR, TEST_SUBDIR, CLASSES, BATCH_SIZE, USE_PRETRAINED, PRETRAINED_MODEL_PATH)
+from riskscope.data_utils import (download_and_extract_data, prepare_train_and_val_datasets, eval_model_on_test)
+from riskscope.augmentation import (apply_augmentation_to_dataset, apply_resize_to_dataset)
+from riskscope.model import build_resnet_model, train_model
+from riskscope.model_loader import load_pretrained_model
+from riskscope.eval_viz import (plot_classification_summary, extract_images_and_labels,
     plot_false_negatives_positives, plot_gradcam_for_categories, plot_samples_category)
-from damage_detector.logging_setup import setup_logging
+from riskscope.logging_setup import setup_logging
 
-from tqdm import tqdm
 from loguru import logger
 
 # ========== MAIN PIPELINE ==========

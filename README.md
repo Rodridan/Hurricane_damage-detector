@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="RiskScope_logo.png" alt="RiskScope Logo" width="200"/>
+  <img src="RiskScope_logo.png" alt="RiskScope Logo" width="300"/>
 </p>
 
 <h1 align="center">RiskScope: Automated detection and classification of hurricane-induced structural damage using deep learning on aerial or satellite imagery.</h1>
@@ -34,6 +34,9 @@ This repository contains all code, utilities, and documentation for building, tr
   - **Phase 1 (Ph1):** Train only custom (top) layers with base (ResNet) frozen.
   - **Phase 2 (Ph2):** Fine-tune last convolutional block of ResNet (except batchnorm), enabling deeper feature adaptation.
 
+<p align="center">
+  <img src="model_scheme.png" alt="Model scheme" width="400"/>
+</p>
 
 ### 3. Model Evaluation
 - Predict on the test set.
@@ -41,16 +44,20 @@ This repository contains all code, utilities, and documentation for building, tr
 - Visualize and save false positive/negative samples, category grids, and GradCAM overlays.
 
 ### 4. Pretrained Models
-- Pretrained weights for both phases (`Ph1` and `Ph2`) available under `pretrained_models/` for immediate use or further fine-tuning.
+Pretrained models for this project are **not stored in the repository** due to their size.  
+Instead, you can download them from the following Google Drive folder and  store them under `pretrained_models/`:
+
+[Download Pretrained Models (Google Drive)](https://drive.google.com/drive/folders/1ufAXL1uJoydDQ85pfs6wNTj3SRVkFO8Y?usp=sharing)
+
 
   - Ph1 – Custom layers trained, base frozen
     ```
-    Model file: 'hurricane_resnet50_224x224_b32_e20_ph1_stdaug_YYYYMMDD.keras'
+    Model file: 'riskscope_resnet50_224x224_b32_e20_ph1_stdaug_YYYYMMDD.keras' (93MB)
     ```
 
   - Ph2 – Last conv block unfrozen, fine-tuned
     ```
-    Model file: 'hurricane_resnet50_224x224_b32_e10_ph2_stdaug_YYYYMMDD.keras'
+    Model file: 'riskscope_resnet50_224x224_b32_e10_ph2_stdaug_YYYYMMDD.keras' (207MB)
     ```
 You may switch between them by updating PRETRAINED_MODEL_PATH in config.py.
 
@@ -66,7 +73,7 @@ cd Hurricane_damage-detector
 uv pip install -e .
 ```
 
-### 2. (Optional) Configure Pipeline
+### (Optional) Configure Pipeline
 Edit riskscope/config.py to set paths, batch sizes, augmentation, etc.
 
 - To use a pretrained model:
@@ -76,7 +83,7 @@ USE_PRETRAINED = True
 PRETRAINED_MODEL_PATH = "pretrained_models/hurricane_resnet50_224x224_b32_e20_ph1_stdaug_20250703.keras"
 Set USE_PRETRAINED = False to train from scratch.
 ```
-1. Run the Pipeline
+### 2. Run the Pipeline
 ```bash
 uv run -m riskscope.main
 The script will download data, train or load the model, run evaluation, and save results in outputs/.
