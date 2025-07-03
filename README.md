@@ -18,6 +18,41 @@ This repository contains all code, utilities, and documentation for building, tr
 - **Flexibility**: Works with both scratch-trained and pretrained models, enabling transfer learning and faster experimentation.
 
 ---
+## Dataset Structure:
+
+This project utilizes a public dataset of hurricane damage imagery, prepared for binary image classification.
+
+### Classes:
+- no_damage (undamaged properties/areas)
+- damage (visibly damaged properties/areas)
+
+### Image Size:
+  - Original: 128x128x3 pixels (RGB)
+  - Resized for model: 224x224x3 pixels (RGB)
+
+### Folder Organization:
+
+  ```bash
+  data/train_hurricane/
+      no_damage/
+          img1.jpg
+          img2.jpg
+          ...
+      damage/
+          img101.jpg
+          img102.jpg
+          ...
+  data/test_hurricane/
+      no_damage/
+      damage/
+  ```
+### Image Count:
+  - Training: ~1,358 images
+  - Validation: ~271 images (automatically split)
+  - Test: ~12,228 images
+
+### Download:
+The dataset is automatically downloaded and extracted by the pipeline, or can be manually accessed [here](https://drive.google.com/uc?id=1pByxsenTnJGBKnKhLTXBqbUN_Kbm7PNK)
 
 ## Model Pipeline Overview
 
