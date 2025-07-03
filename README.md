@@ -24,6 +24,7 @@ This repository contains all code, utilities, and documentation for building, tr
 ### 1. Data Preparation
 - Download and extract hurricane imagery datasets from Google Drive.
 - Organize data into standard train/validation/test splits.
+- **Augmentation**: Standard augmentation applied to training data for robustness.
 
 ### 2. Model Building & Training
 
@@ -32,7 +33,7 @@ This repository contains all code, utilities, and documentation for building, tr
 - **Training Phases**:
   - **Phase 1 (Ph1):** Train only custom (top) layers with base (ResNet) frozen.
   - **Phase 2 (Ph2):** Fine-tune last convolutional block of ResNet (except batchnorm), enabling deeper feature adaptation.
-- **Augmentation**: Standard augmentation applied to training data for robustness.
+
 
 ### 3. Model Evaluation
 - Predict on the test set.
@@ -66,7 +67,7 @@ uv pip install -e .
 ```
 
 ### 2. (Optional) Configure Pipeline
-Edit damage_detector/config.py to set paths, batch sizes, augmentation, etc.
+Edit riskscope/config.py to set paths, batch sizes, augmentation, etc.
 
 - To use a pretrained model:
 
@@ -77,7 +78,7 @@ Set USE_PRETRAINED = False to train from scratch.
 ```
 1. Run the Pipeline
 ```bash
-uv run -m damage_detector.main
+uv run -m riskscope.main
 The script will download data, train or load the model, run evaluation, and save results in outputs/.
 ```
 # Output Examples
@@ -90,7 +91,7 @@ The script will download data, train or load the model, run evaluation, and save
 ![GradCAM](examples/gradcam.png)
 ### Sample Images by Prediction Category:
 ![Sample Categories](examples/samples_category.png)
-All gegerated outputs are saved as both .png and .tiff in the outputs/ directory.
+All generated outputs are saved as both .png and .tiff in the outputs/ directory.
 
 ## Acknowledgments
 Project developed as part of Constructor Academy AI Bootcamp, 2025.
