@@ -1,5 +1,9 @@
-# Hurricane_damage-detector
-### Automated detection and classification of hurricane-induced structural damage using deep learning on aerial or satellite imagery.
+<p align="center">
+  <img src="RiskScope_logo.png" alt="RiskScope Logo" width="200"/>
+</p>
+
+<h1 align="center">RiskScope: Automated detection and classification of hurricane-induced structural damage using deep learning on aerial or satellite imagery.</h1>
+ 
 
 ## Introduction
 
@@ -76,7 +80,7 @@ Set USE_PRETRAINED = False to train from scratch.
 uv run -m damage_detector.main
 The script will download data, train or load the model, run evaluation, and save results in outputs/.
 ```
-1. Output Examples
+# Output Examples
 ### Classification Summary:
  ![Classification Summary](examples/classification_summary.png)
 
