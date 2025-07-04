@@ -1,5 +1,6 @@
 IMG_DIMS = (128, 128)
 BATCH_SIZE = 8
+EVAL_BATCH_SIZE = 16 
 CLASSES = ['no_damage', 'damage']
 GDRIVE_ID = "1pByxsenTnJGBKnKhLTXBqbUN_Kbm7PNK"
 DATA_DIR = "data"
