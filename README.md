@@ -16,7 +16,6 @@ This repository contains all code, utilities, and documentation for building, tr
 - **Speed**: Supports batch inference and efficient data loading.
 - **Explainability**: Integrated GradCAM visualizations for model interpretability.
 - **Flexibility**: Works with both scratch-trained and pretrained models, enabling transfer learning and faster experimentation.
-
 ---
 ## Dataset Structure:
 
@@ -126,6 +125,22 @@ The script will download data, train or load the model, run evaluation, and save
 # Output Examples
 ### Classification Summary:
  ![Classification Summary](examples/classification_summary.png)
+
+- Confusion Matrix (Left Panel)
+  - Provides a detailed breakdown of the model's predictions versus the true labels.
+     - Top-left (True Negatives): Number of no_damage images correctly classified as no_damage.
+     - Top-right (False Positives): Number of no_damage images incorrectly classified as damage.
+     - Bottom-left (False Negatives): Number of damage images incorrectly classified as no_damage.
+     - Bottom-right (True Positives): Number of damage images correctly classified as damage.
+  - Quickly assess the types of errors the model is making and the balance of performance across classes.
+
+- Accuracy Curves (Middle Panel)
+   - Shows training and validation accuracy over all epochs. Vertical dashed lines (if present) indicate phase changes.
+  - Track model learning progression, diagnose overfitting/underfitting, and evaluate the effect of transfer learning or fine-tuning phases. A closing gap between curves suggests reduced overfitting and robust generalization.
+
+- Loss Curves (Right Panel)
+   - Shows training and validation loss over all epochs.
+  - Analyze the speed and stability of convergence, and check whether training improvements translate to better validation performance. Consistently decreasing curves indicate proper model convergence while sudden increases in validation loss may point to overfitting.
 
 ### False Positives/Negatives Grid:
 ![False Positives/Negatives](examples/misclasifications.png)

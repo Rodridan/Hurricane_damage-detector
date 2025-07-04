@@ -1,10 +1,12 @@
 import os
 from loguru import logger
+from riskscope.config import USE_PRETRAINED 
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from typing import Sequence, Any, List, Optional, Dict, Tuple
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, classification_report, roc_curve, auc
+
 
 try:
     from tf_keras_vis.gradcam import Gradcam
@@ -55,69 +57,83 @@ def visualize_samples_from_dataset(
 def plot_classification_summary(
     predictions: Sequence[float],
     test_labels: Sequence[int],
-    histories: List[Any],
+    histories: List[Any] = None,
     title: str = "Classification Results",
     threshold: float = 0.5,
     class_names: Sequence[str] = ("no_damage", "damage"),
     phase_labels: Optional[List[str]] = None,
-    filename_base: str = "classification_summary"
+    filename_base: str = "classification_summary",
+    pretrained: bool = False,
 ) -> None:
     """
-    Plots confusion matrix, accuracy/loss curves, and prints classification report.
+    Plots evaluation summary:
+    - If pretrained is False: plots confusion matrix, ROC curve, accuracy/loss curves, and prints classification report.
+    - If pretrained is True: plots only confusion matrix and ROC curve, prints classification report.
     Saves plot as .png and .tiff in outputs folder.
     """
-    logger.info("Plotting classification summary.")
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    logger.info("Plotting classification summary (pretrained: {}).", pretrained)
     binary_preds = (np.array(predictions) > threshold).astype(int)
     cm = confusion_matrix(test_labels, binary_preds)
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=class_names)
 
-    # Prepare metrics
-    acc, val_acc, loss, val_loss, phase_starts = [], [], [], [], [0]
-    for hist in histories:
-        acc.extend(hist.history.get('accuracy', []))
-        val_acc.extend(hist.history.get('val_accuracy', []))
-        loss.extend(hist.history.get('loss', []))
-        val_loss.extend(hist.history.get('val_loss', []))
-        phase_starts.append(len(acc))
-    phase_starts = phase_starts[:-1]
+    # ROC/AUC calculation
+    fpr, tpr, _ = roc_curve(test_labels, predictions)
+    roc_auc = auc(fpr, tpr)
 
-    # Plot
-    fig, axs = plt.subplots(1, 3, figsize=(21, 6))
-    disp.plot(ax=axs[0], cmap=plt.cm.Blues, colorbar=False)
-    axs[0].set_title("Confusion Matrix")
-    axs[0].set_xlabel('Predicted Label')
-    axs[0].set_ylabel('True Label')
+    if not pretrained and histories is not None:
+        acc, val_acc, loss, val_loss, phase_starts = [], [], [], [], [0]
+        for hist in histories:
+            acc.extend(hist.history.get('accuracy', []))
+            val_acc.extend(hist.history.get('val_accuracy', []))
+            loss.extend(hist.history.get('loss', []))
+            val_loss.extend(hist.history.get('val_loss', []))
+            phase_starts.append(len(acc))
+        phase_starts = phase_starts[:-1]
 
-    axs[1].plot(acc, label='Train Acc', marker='o')
-    axs[1].plot(val_acc, label='Val Acc', marker='s')
-    for i, start in enumerate(phase_starts[1:], 1):
-        axs[1].axvline(start, color='k', linestyle=':', alpha=0.7)
-        if phase_labels and i < len(phase_labels):
-            axs[1].text(start + 0.5, axs[1].get_ylim()[1] * 0.97, phase_labels[i],
-                        rotation=90, va='top', ha='right', fontsize=9, alpha=0.7)
-    axs[1].set_xlabel('Epoch')
-    axs[1].set_ylabel('Accuracy')
-    axs[1].set_title('Accuracy')
-    axs[1].legend()
-    axs[1].grid(alpha=0.3)
+        fig, axs = plt.subplots(1, 4, figsize=(28, 6))
+        disp.plot(ax=axs[0], cmap=plt.cm.Blues, colorbar=False)
+        axs[0].set_title("Confusion Matrix")
+        axs[1].plot(acc, label='Train Acc', marker='o')
+        axs[1].plot(val_acc, label='Val Acc', marker='s')
+        axs[1].set_xlabel('Epoch')
+        axs[1].set_ylabel('Accuracy')
+        axs[1].set_title('Accuracy')
+        axs[1].legend()
+        axs[2].plot(loss, label='Train Loss', marker='o')
+        axs[2].plot(val_loss, label='Val Loss', marker='s')
+        axs[2].set_xlabel('Epoch')
+        axs[2].set_ylabel('Loss')
+        axs[2].set_title('Loss')
+        axs[2].legend()
+        axs[3].plot(fpr, tpr, label=f'AUC = {roc_auc:.2f}')
+        axs[3].plot([0, 1], [0, 1], 'k--', alpha=0.7)
+        axs[3].set_xlabel('False Positive Rate')
+        axs[3].set_ylabel('True Positive Rate')
+        axs[3].set_title('ROC Curve')
+        axs[3].legend()
+        plt.suptitle(title, fontsize=18, fontweight='bold')
+        plt.tight_layout(rect=[0, 0, 1, 0.96])
+        save_figure(fig, filename_base)
+        plt.show()
+    else:
+        fig, axs = plt.subplots(1, 2, figsize=(14, 6))
+        disp.plot(ax=axs[0], cmap=plt.cm.Blues, colorbar=False)
+        axs[0].set_title("Confusion Matrix")
+        axs[1].plot(fpr, tpr, label=f'AUC = {roc_auc:.2f}')
+        axs[1].plot([0, 1], [0, 1], 'k--', alpha=0.7)
+        axs[1].set_xlabel('False Positive Rate')
+        axs[1].set_ylabel('True Positive Rate')
+        axs[1].set_title('ROC Curve')
+        axs[1].legend()
+        plt.suptitle(title, fontsize=18, fontweight='bold')
+        plt.tight_layout(rect=[0, 0, 1, 0.96])
+        save_figure(fig, filename_base)
+        plt.show()
 
-    axs[2].plot(loss, label='Train Loss', marker='o')
-    axs[2].plot(val_loss, label='Val Loss', marker='s')
-    for i, start in enumerate(phase_starts[1:], 1):
-        axs[2].axvline(start, color='k', linestyle=':', alpha=0.7)
-        if phase_labels and i < len(phase_labels):
-            axs[2].text(start + 0.5, axs[2].get_ylim()[1] * 0.97, phase_labels[i],
-                        rotation=90, va='top', ha='right', fontsize=9, alpha=0.7)
-    axs[2].set_xlabel('Epoch')
-    axs[2].set_ylabel('Loss')
-    axs[2].set_title('Loss')
-    axs[2].legend()
-    axs[2].grid(alpha=0.3)
-
-    plt.suptitle(title, fontsize=18, fontweight='bold')
-    plt.tight_layout(rect=[0, 0, 1, 0.96])
-    save_figure(fig, filename_base)
-    plt.show()
+    # Print classification report always
     logger.info("Classification report:\n{}", classification_report(test_labels, binary_preds, target_names=class_names))
 #--------------------------------------------------------------
 

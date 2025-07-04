@@ -51,17 +51,23 @@ if __name__ == "__main__":
     logger.info("Evaluating model after phase 1")
     test_ds, test_labels, predictions = eval_model_on_test(model, test_dir=TEST_DIR)
     binary_preds = (predictions > 0.5).astype(int)
+    
     plot_classification_summary(
-        predictions=predictions, test_labels=test_labels,
-        histories=[h for h in [history1] if h is not None],
-        class_names=CLASSES, title="Classification Results: Phase 1",
-        filename_base="classification_summary_phase1"
+        predictions=predictions,
+        test_labels=test_labels,
+        histories=[history] if not USE_PRETRAINED else None,
+        class_names=CLASSES,
+        title="Classification Results",
+        filename_base="classification_summary",
+        pretrained=USE_PRETRAINED,
     )
     images, labels = extract_images_and_labels(test_ds)
+    
     plot_false_negatives_positives(
         images=images, test_labels=test_labels, binary_preds=binary_preds, n_show=8,
         title="Misclassifications: Phase 1", filename_base="fp_fn_grid_phase1"
     )
+    
     plot_samples_category(
         images=images, binary_preds=binary_preds, test_labels=test_labels, n_show=8,
         filename_base="category_samples_phase1"
