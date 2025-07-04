@@ -120,19 +120,26 @@ Set USE_PRETRAINED = False to train from scratch.
 ### 2. Run the Pipeline
 ```bash
 uv run -m riskscope.main
-The script will download data, train or load the model, run evaluation, and save results in outputs/.
 ```
+The script will download data, train or load the model, run evaluation, and save results in outputs/.
+
 # Output Examples
 ### Classification Summary:
- ![Classification Summary](examples/classification_summary.png)
+1. ### When using pretrained models:
+   
+  ![Classification Summary pretrained](examples/classification_summary_pretrained.png)
+  - #### Confusion Matrix (Left Panel)
+    - Provides a detailed breakdown of the model's predictions versus the true labels.
+       - Top-left (True Negatives): Number of no_damage images correctly classified as no_damage.
+       - Top-right (False Positives): Number of no_damage images incorrectly classified as damage.
+       - Bottom-left (False Negatives): Number of damage images incorrectly classified as no_damage.
+       - Bottom-right (True Positives): Number of damage images correctly classified as damage.
+    - Quickly assess the types of errors the model is making and the balance of performance across classes. 
+  - #### ROC Curve and AUC Score (Right Panel)
+    - The ROC (Receiver Operating Characteristic) curve plots the true positive rate against the false positive rate at various threshold settings. The closer the curve is to the upper left corner, the better the model performance. The Area Under the Curve (AUC) provides a single scalar value for overall classification quality. Here, an AUC of 0.99 indicates excellent discrimination between classes. The diagonal line Represents a random classifier (AUC = 0.5).
 
-- Confusion Matrix (Left Panel)
-  - Provides a detailed breakdown of the model's predictions versus the true labels.
-     - Top-left (True Negatives): Number of no_damage images correctly classified as no_damage.
-     - Top-right (False Positives): Number of no_damage images incorrectly classified as damage.
-     - Bottom-left (False Negatives): Number of damage images incorrectly classified as no_damage.
-     - Bottom-right (True Positives): Number of damage images correctly classified as damage.
-  - Quickly assess the types of errors the model is making and the balance of performance across classes.
+2. ### When training a new model:
+ ![Classification Summary](examples/classification_summary.png)
 
 - Accuracy Curves (Middle Panel)
    - Shows training and validation accuracy over all epochs. Vertical dashed lines (if present) indicate phase changes.

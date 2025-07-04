@@ -1,6 +1,6 @@
 import os, gdown, zipfile, tensorflow as tf
 from loguru import logger
-from riskscope.config import BATCH_SIZE, CLASSES, IMG_DIMS
+from riskscope.config import BATCH_SIZE, CLASSES, IMG_DIMS,EVAL_BATCH_SIZE
 from typing import Tuple, Sequence
 import numpy as np
 from tqdm import tqdm
@@ -8,6 +8,18 @@ from tqdm import tqdm
 #--------------------------------------------------------------
 #DATA DOWBLOADING & EXTRACTION
 #--------------------------------------------------------------
+def get_test_dataset(test_dir, img_dims=(224, 224), class_names=None):
+    test_ds = tf.keras.preprocessing.image_dataset_from_directory(
+        test_dir,
+        class_names=class_names,
+        seed=42,
+        image_size=img_dims,
+        batch_size=EVAL_BATCH_SIZE,
+        shuffle=False
+    )
+    test_ds = test_ds.prefetch(buffer_size=1)
+    return test_ds
+
 def download_and_extract_data(
     gdrive_id: str,
     data_dir: str = "data",
@@ -117,28 +129,41 @@ def prepare_train_and_val_datasets(
     return train_ds, val_ds
 
 #--------------------------------------------------------------
-def eval_model_on_test(
-    model: tf.keras.Model,
-    test_dir: str = TEST_DIR,
-    img_dims: Tuple[int, int] = IMG_DIMS,
-    batch_size: int = 128,
-    class_names: Sequence[str] = CLASSES
-) -> Tuple[tf.data.Dataset, np.ndarray, np.ndarray]:
+def get_test_dataset(
+    test_dir: str,
+    img_dims: Tuple[int, int],
+    batch_size: int,
+    class_names: Sequence[str]
+) -> tf.data.Dataset:
     """
-    Evaluate model on test dataset, return dataset, true labels, and predictions.
+    Loads test dataset for evaluation and extraction, using safe batch size and prefetch.
     """
-    logger.info("Loading test dataset from: {}", test_dir)
     test_ds = tf.keras.preprocessing.image_dataset_from_directory(
         test_dir,
         class_names=class_names,
         seed=42,
         image_size=img_dims,
         batch_size=batch_size,
+        shuffle=False
     )
-    # Resize images for model input (e.g., 224x224 if using ResNet)
+    # Always resize to model input (e.g., 224x224)
     test_ds = test_ds.map(
         lambda image, label: (tf.image.resize(image, (224, 224)), label)
-    ).prefetch(buffer_size=tf.data.AUTOTUNE)
+    ).prefetch(buffer_size=1)
+    return test_ds
+
+def eval_model_on_test(
+    model: tf.keras.Model,
+    test_dir: str = TEST_DIR,
+    img_dims: Tuple[int, int] = IMG_DIMS,
+    batch_size: int = 16,   # Use small batch size for evaluation
+    class_names: Sequence[str] = CLASSES
+) -> Tuple[tf.data.Dataset, np.ndarray, np.ndarray]:
+    """
+    Evaluate model on test dataset, return dataset, true labels, and predictions.
+    """
+    logger.info("Loading test dataset from: {}", test_dir)
+    test_ds = get_test_dataset(test_dir, img_dims, batch_size, class_names)
 
     test_labels = []
     predictions = []
