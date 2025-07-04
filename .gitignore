@@ -17,6 +17,10 @@ __pycache__/
 pretrained_models/*
 !pretrained_models/.gitkeep
 
+# Ignore all files in data except for the directory itself
+data/*
+!data/.gitkeep
+
 # Distribution / packaging
 .Python
 build/
