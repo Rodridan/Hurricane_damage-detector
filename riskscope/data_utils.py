@@ -4,7 +4,6 @@ from riskscope.config import BATCH_SIZE, CLASSES, IMG_DIMS,EVAL_BATCH_SIZE
 from typing import Tuple, Sequence
 import numpy as np
 from tqdm import tqdm
-
 #--------------------------------------------------------------
 #DATA DOWBLOADING & EXTRACTION
 #--------------------------------------------------------------

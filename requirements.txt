@@ -19,8 +19,8 @@ loguru>=0.7
 # Image processing for overlays (GradCAM)
 opencv-python>=4.5
 
-# Jupyter notebook (optional, for running .ipynb)
+# Jupyter notebook
 jupyter
 
-# Google Drive downloader (optional, for dataset fetch)
+# Google Drive downloader
 gdown
