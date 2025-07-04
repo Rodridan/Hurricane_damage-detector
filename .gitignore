@@ -10,16 +10,19 @@ __pycache__/
 outputs/
 *.log
 *.h5
+*.keras
 __pycache__/
 .ipynb_checkpoints/
 
-# Ignore all files in pretrained_models except for the directory itself
+# Ignore all files in pretrained_models, data, outputs except for the directory itself
 pretrained_models/*
 !pretrained_models/.gitkeep
 
-# Ignore all files in data except for the directory itself
 data/*
 !data/.gitkeep
+
+outputs/*
+!outputs/.gitkeep
 
 # Distribution / packaging
 .Python
